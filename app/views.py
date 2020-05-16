@@ -44,6 +44,25 @@ def form_errors(form):
 
     return error_messages
 
+@app.route('/api/upload', methods=['POST'])
+def upload():
+    form = UploadForm()
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            description = form.description.data
+             = form.photo.data
+            filename = secure_filename(f.filename)
+            f.save(os.path.join(app.instance_path, 'photos', filename))
+
+            return {
+                "message": "File Upload Successful"
+                "filename": filename
+                "description": description
+                }
+    else:
+        return {"errors": form_errors(form)}
+
+    return render_template('/api/upload.html', form=form)
 
 ###
 # The functions below should be applicable to all Flask apps.
